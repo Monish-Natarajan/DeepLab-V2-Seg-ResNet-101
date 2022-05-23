@@ -12,10 +12,10 @@ from tqdm import tqdm
 
 import data.transforms_seg as Trs
 from configs.defaults import _C
-from data.voc import VOC_seg
+from data.pascal_voc import VOC_seg
 
 from models.PolyScheduler import PolynomialLR
-from models.SegNet import DeepLab_ASPP, DeepLab_LargeFOV
+from models.SegNet import DeepLab_ASPP
 from utils.densecrf import dense_crf #
 from utils.evaluate import evaluate  #
 #from utils.wandb import init_wandb, wandb_log_seg
@@ -105,7 +105,7 @@ def train(cfg, train_loader, model, checkpoint):
 
         train_loss = loss.item()
         # Logging Loss and LR on wandb
-        wandb_log_seg(train_loss, optimizer.param_groups[0]["lr"], it)
+        #wandb_log_seg(train_loss, optimizer.param_groups[0]["lr"], it)
 
         save_dir = "./ckpts/"
         if it%1000 == 0 or it == cfg.SOLVER.MAX_ITER:
@@ -116,16 +116,16 @@ def train(cfg, train_loader, model, checkpoint):
                 'iter': it,
             }
             torch.save(checkpoint, save_dir + str(it) + '.pth')
-            if cfg.WANDB.MODE: 
-                wandb.save(save_dir + str(it) + '.pth')
+            # if cfg.WANDB.MODE: 
+            #     wandb.save(save_dir + str(it) + '.pth')
             # Evaluate the train_loader at this checkpoint and Log the metrics on WandB
-            accuracy, iou = evaluate(cfg, train_loader, model)
-            if cfg.WANDB.MODE: 
-                # Log on WandB
-                wandb.log({
-                    "Mean IoU": iou,
-                    "Mean Accuracy": accuracy
-                    })
+            # accuracy, iou = evaluate(cfg, train_loader, model)
+            # if cfg.WANDB.MODE: 
+            #     # Log on WandB
+            #     wandb.log({
+            #         "Mean IoU": iou,
+            #         "Mean Accuracy": accuracy
+            #         })
 
 
 def val(cfg, data_loader, model, checkpoint):
@@ -146,12 +146,12 @@ def val(cfg, data_loader, model, checkpoint):
     accuracy, iou = evaluate(cfg, data_loader, model)
     print("Validation Mean Accuracy ", accuracy)
     print("Validation Mean IoU ", iou)
-    wandb.run.summary["Validation Mean Accuracy"] = accuracy
-    wandb.run.summary["Validation Mean IoU"] = iou
+    # wandb.run.summary["Validation Mean Accuracy"] = accuracy
+    # wandb.run.summary["Validation Mean IoU"] = iou
     # Evaluating the validation dataloader after CRF post-processing
     crf_accuracy, crf_iou = dense_crf(cfg, data_loader, model)
-    wandb.run.summary["CRF Validation Mean Accuracy"] = crf_accuracy
-    wandb.run.summary["CRF Validation Mean IoU"] = crf_iou   
+    # wandb.run.summary["CRF Validation Mean Accuracy"] = crf_accuracy
+    # wandb.run.summary["CRF Validation Mean IoU"] = crf_iou   
     print("CRF Validation Mean Accuracy ", crf_accuracy)
     print("CRF Validation Mean IoU ", crf_iou)
 
@@ -170,8 +170,8 @@ def main(cfg):
         random.seed(cfg.SEED)
         os.environ["PYTHONHASHSEED"] = str(cfg.SEED)
         
-    if cfg.WANDB.MODE: 
-        init_wandb(cfg)
+    # if cfg.WANDB.MODE: 
+    #     init_wandb(cfg)
         
     if cfg.DATA.MODE == "train_weak":
         tr_transforms = Trs.Compose([
@@ -224,13 +224,14 @@ def main(cfg):
     # Save model locally and then on wandb
     save_dir = './ckpts/'
     # Load pretrained model from wandb if present
-    if cfg.WANDB.CHECKPOINT:
-        wandb_checkpoint = wandb.restore('ckpts/' + cfg.WANDB.CHECKPOINT)    
-        checkpoint = torch.load(wandb_checkpoint.name)
-        print("WandB checkpoint Loaded with iteration: ", checkpoint['iter'])
-    else:
-        print("WandB checkpoint not Loaded")
-        checkpoint = None
+    # if cfg.WANDB.CHECKPOINT:
+    #     wandb_checkpoint = wandb.restore('ckpts/' + cfg.WANDB.CHECKPOINT)    
+    #     checkpoint = torch.load(wandb_checkpoint.name)
+    #     print("WandB checkpoint Loaded with iteration: ", checkpoint['iter'])
+    # else:
+    #     print("WandB checkpoint not Loaded")
+    #     checkpoint = None
+    checkpoint = None
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     
