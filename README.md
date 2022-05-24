@@ -8,7 +8,8 @@ pip install omegaconf
 ```
 Instructions
 - Pass configuration file path to main
-- 
+- Add model weights to model directory from the following [link](https://drive.google.com/file/d/1sBU-HwPqFvSrDP2eN8ZciL51i8MnZNtt/view?usp=sharing)
+
 ```bash
 python3 train.py
 ```
