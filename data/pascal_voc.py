@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from PIL import Image
 import torch
 from torch.utils.data import Dataset, DataLoader
-from .data import transforms as Trs
+from . import transforms as Trs
 
 class VOC_seg(Dataset):
     def __init__(self, data_root, data_mode='train_weak', transforms=None):

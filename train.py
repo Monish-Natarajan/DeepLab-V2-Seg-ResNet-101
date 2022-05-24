@@ -177,7 +177,7 @@ def train(config_path, cuda):
                 os.path.join(checkpoint_dir, "checkpoint_{}.pth".format(iteration)),
             )
 
-    torch.save( model.module.state_dict(), checkpoint_dir, "checkpoint_final.pth")
+    torch.save( model.module.state_dict(), os.path.join(checkpoint_dir, "checkpoint_final.pth"))
 
 if __name__ == '__main__':
   config_path = '/content/DeepLab-V2-Seg-ResNet-101-/config/deeplabv2.yaml'
