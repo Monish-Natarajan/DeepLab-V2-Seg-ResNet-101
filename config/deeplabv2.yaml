@@ -1,10 +1,10 @@
 EXP:
     ID: voc12
-    OUTPUT_DIR: data
+    OUTPUT_DIR: /co
 
 DATASET:
-    NAME: vocaug
-    ROOT: /media/kazuto1011/Extra/VOCdevkit
+    NAME: /content/DeepLab-V2-Seg-ResNet-101-/model
+    ROOT: /content/DeepLab-V2-Seg-ResNet-101-/dataset/VOC_toy
     LABELS: ./data/datasets/voc12/labels.txt
     N_CLASSES: 21
     IGNORE_LABEL: 255
@@ -31,15 +31,15 @@ MODEL:
     NAME: DeepLabV2_ResNet101_MSC
     N_BLOCKS: [3, 4, 23, 3]
     ATROUS_RATES: [6, 12, 18, 24]
-    INIT_MODEL: data/models/coco/deeplabv1_resnet101/caffemodel/deeplabv1_resnet101-coco.pth
+    INIT_MODEL: /content/DeepLab-V2-Seg-ResNet-101-/model/deeplabv1_resnet101-coco.pth
 
 SOLVER:
     BATCH_SIZE:
         TRAIN: 5
         TEST: 1
-    ITER_MAX: 100 #CHANGE MAX ITER AS DESIRED (WAS 20000 initially)
+    ITER_MAX: 100 #Change as desired (was initially 20000)
     ITER_SIZE: 2
-    ITER_SAVE: 5000
+    ITER_SAVE: 5000  #Save model after every ITER_SAVE iterations
     ITER_TB: 100
     LR_DECAY: 10
     LR: 2.5e-4
