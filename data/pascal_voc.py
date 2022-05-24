@@ -39,7 +39,7 @@ class VOC_seg(Dataset):
         
         return img, masks
 
-    if name == '__main__':
+    if __name__ == '__main__':
         tr_transforms = Compose([
             RandomScale(0.5, 1.5),
             ResizeRandomCrop((321, 321)), 
@@ -48,8 +48,8 @@ class VOC_seg(Dataset):
             Normalize_Caffe(),
             ])
 
-    mydataset = VOC_seg(data_root='/content/data/VOC_toy',data_mode='train_weak',transforms=tr_transforms)
-    tloader = DataLoader(mydataset, batch_size=2, shuffle=False, num_workers=2)
-    for img,mask in tloader:
-        print(img.shape)
-        print(mask[0].shape)  
+        mydataset = VOC_seg(data_root='/content/data/VOC_toy',data_mode='train_weak',transforms=tr_transforms)
+        tloader = DataLoader(mydataset, batch_size=2, shuffle=False, num_workers=2)
+        for img,mask in tloader:
+            print(img.shape)
+            print(mask[0].shape)  
