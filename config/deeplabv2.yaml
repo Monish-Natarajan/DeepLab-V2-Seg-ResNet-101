@@ -1,6 +1,6 @@
 EXP:
     ID: voc12
-    OUTPUT_DIR: /co
+    OUTPUT_DIR: /content/model
 
 DATASET:
     NAME: /content/DeepLab-V2-Seg-ResNet-101-/model
